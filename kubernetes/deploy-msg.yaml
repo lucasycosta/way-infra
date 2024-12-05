@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: way-msg
+spec:
+  selector:
+    matchLabels:
+      app: way-msg
+  template:
+    metadata:
+      labels:
+        app: way-msg
+    spec:
+      containers:
+      - name: way-msg
+        image: zeussh/way-msg:1
+        ports:
+        - containerPort: 8083
+        env:
+        - name: EUREKA_HOST
+          value: "http://way-discovery:8761/eureka"
+        - name: JDBC_DATABASE_URL
+          value: "jdbc:postgresql://postgres:5432/wayconsig"
+        - name: JDBC_DATABASE_USERNAME
+          value: "postrgres"
+        - name: JDBC_DATABASE_PASSWORD
+          value: "postgres"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: way-msg
+spec:
+  selector:
+    app: way-msg
+  ports:
+  - port: 8083
+    targetPort: 8083
+    protocol: TCP

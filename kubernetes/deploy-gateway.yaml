@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: way-gateway
+spec:
+  selector:
+    matchLabels:
+      app: way-gateway
+  template:
+    metadata:
+      labels:
+        app: way-gateway
+    spec:
+      containers:
+      - name: way-gateway
+        image: zeussh/way-gateway:1
+        ports:
+        - containerPort: 8080
+        env:
+        - name: EUREKA_HOST
+          value: "http://way-discovery:8761/eureka"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: way-gateway
+spec:
+  selector:
+    app: way-gateway
+  ports:
+  - port: 8080
+    targetPort: 8080
+    protocol: TCP

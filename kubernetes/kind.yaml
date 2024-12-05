@@ -1,0 +1,53 @@
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane              
+- role: control-plane
+- role: worker #amd
+  extraPortMappings:
+  - containerPort: 30000        
+    hostPort: 8085              
+    listenAddress: "0.0.0.0"    
+    protocol: tcp
+- role: worker #io
+  extraPortMappings:
+  - containerPort: 30001        
+    hostPort: 8084              
+    listenAddress: "0.0.0.0"    
+    protocol: tcp
+- role: worker #log
+  extraPortMappings:
+    - containerPort: 30002        
+      hostPort: 8082              
+      listenAddress: "0.0.0.0"    
+      protocol: tcp
+- role: worker #msg
+  extraPortMappings:
+  - containerPort: 30003        
+    hostPort: 8083              
+    listenAddress: "0.0.0.0"    
+    protocol: tcp
+- role: worker #oper
+  extraPortMappings:
+  - containerPort: 30004        
+    hostPort: 8086              
+    listenAddress: "0.0.0.0"    
+    protocol: tcp
+- role: worker #webservice
+  extraPortMappings:
+  - containerPort: 30007        
+    hostPort: 8081              
+    listenAddress: "0.0.0.0"    
+    protocol: tcp
+- role: worker #discovery
+  extraPortMappings:
+  - containerPort: 30005        
+    hostPort: 8761              
+    listenAddress: "0.0.0.0"    
+    protocol: tcp
+- role: worker #gateway
+  extraPortMappings:
+  - containerPort: 30006        
+    hostPort: 8080              
+    listenAddress: "0.0.0.0"    
+    protocol: tcp

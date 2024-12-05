@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: way-adm
+spec:
+  selector:
+    matchLabels:
+      app: way-adm
+  template:
+    metadata:
+      labels:
+        app: way-adm
+    spec:
+      containers:
+      - name: way-adm
+        image: zeussh/way-adm:1
+        ports:
+        - containerPort: 8085
+        env:
+        - name: EUREKA_HOST
+          value: "http://way-discovery:8761/eureka"
+        - name: JDBC_DATABASE_URL
+          value: "jdbc:postgresql://postgres:5432/wayconsig"
+        - name: JDBC_DATABASE_USERNAME
+          value: "postrgres"
+        - name: JDBC_DATABASE_PASSWORD
+          value: "postgres"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: way-adm
+spec:
+  selector:
+    app: way-adm
+  ports:
+  - port: 8085
+    targetPort: 8085
+    protocol: TCP

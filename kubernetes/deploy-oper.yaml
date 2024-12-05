@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: way-oper
+spec:
+  selector:
+    matchLabels:
+      app: way-oper
+  template:
+    metadata:
+      labels:
+        app: way-oper
+    spec:
+      containers:
+      - name: way-oper
+        image: zeussh/way-oper:1
+        ports:
+        - containerPort: 8086
+        env:
+        - name: EUREKA_HOST
+          value: "http://way-discovery:8761/eureka"
+        - name: JDBC_DATABASE_URL
+          value: "jdbc:postgresql://postgres:5432/wayconsig"
+        - name: JDBC_DATABASE_USERNAME
+          value: "postrgres"
+        - name: JDBC_DATABASE_PASSWORD
+          value: "postgres"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: way-oper
+spec:
+  selector:
+    app: way-oper
+  ports:
+  - port: 8086
+    targetPort: 8086
+    protocol: TCP

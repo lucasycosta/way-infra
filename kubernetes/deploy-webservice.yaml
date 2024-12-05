@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: way-webservice
+spec:
+  selector:
+    matchLabels:
+      app: way-webservice
+  template:
+    metadata:
+      labels:
+        app: way-webservice
+    spec:
+      containers:
+      - name: way-webservice
+        image: zeussh/way-webservice:1
+        ports:
+        - containerPort: 8081
+        env:
+        - name: EUREKA_HOST
+          value: "http://way-discovery:8761/eureka"
+        - name: JDBC_DATABASE_URL
+          value: "jdbc:postgresql://postgres:5432/wayconsig"
+        - name: JDBC_DATABASE_USERNAME
+          value: "postrgres"
+        - name: JDBC_DATABASE_PASSWORD
+          value: "postgres"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: way-webservice
+spec:
+  selector:
+    app: way-webservice
+  ports:
+  - port: 8081
+    targetPort: 8081
+    protocol: TCP

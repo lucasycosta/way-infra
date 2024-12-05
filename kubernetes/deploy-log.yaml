@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: way-log
+spec:
+  selector:
+    matchLabels:
+      app: way-log
+  template:
+    metadata:
+      labels:
+        app: way-log
+    spec:
+      containers:
+      - name: way-log
+        image: zeussh/way-log:1
+        ports:
+        - containerPort: 8082
+        env:
+        - name: EUREKA_HOST
+          value: "http://way-discovery:8761/eureka"
+        - name: JDBC_DATABASE_URL
+          value: "jdbc:postgresql://postgres:5432/log"
+        - name: JDBC_DATABASE_USERNAME
+          value: "postrgres"
+        - name: JDBC_DATABASE_PASSWORD
+          value: "postgres"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: way-log
+spec:
+  selector:
+    app: way-log
+  ports:
+  - port: 8082
+    targetPort: 8082
+    protocol: TCP
